@@ -14,6 +14,16 @@ else
     echo "Screen is already installed."
 fi
 
+# Check if Git is installed
+
+echo "checking if git is installed..."
+if ! command -v git &> /dev/null; then 
+    echo "git is not installed. Installing git"
+    sudo apt update && sudo apt install git -y
+else
+    echo " git is already installed"
+
+
 # Check if Docker is installed
 echo "Checking if Docker is installed..."
 if ! command -v docker &> /dev/null; then
@@ -48,17 +58,13 @@ http_port=${http_port:-3010}
 read -p "Enter the port for HTTPS (default 3011): " https_port
 https_port=${https_port:-3011}
 
-# Define variables for username and password
-NEW_USERNAME="newuser"
-NEW_PASSWORD="newpassword"
+# Prompt for secure inputs
+echo "Please enter the username for Chromium (CUSTOM_USER):"
+read -p "Username: " CUSTOM_USER
 
-# Replace the username
-sed -i "/username:/s/:.*/: ${NEW_USERNAME}/" docker-compose.yml
-
-# Replace the password
-sed -i "/password:/s/:.*/: ${NEW_PASSWORD}/" docker-compose.yml
-
-echo "Updated username and password in docker-compose.yml"
+echo "Please enter the password for Chromium (PASSWORD):"
+read -s -p "Password: " PASSWORD
+echo  # Newline after password input
 
 # Create docker-compose.yaml file
 echo "Creating docker-compose file..."
@@ -71,12 +77,12 @@ services:
     security_opt:
       - seccomp:unconfined #optional
     environment:
-      - CUSTOM_USER=$USER
-      - PASSWORD=yourpassword  # Replace with a secure password
+      - CUSTOM_USER=$CUSTOM_USER
+      - PASSWORD=$PASSWORD
       - PUID=1000
       - PGID=1000
       - TZ=Europe/London  # Replace with your timezone if necessary
-      - CHROME_CLI= https://github.com/OctoetIx # optional
+      - CHROME_CLI=https://github.com/OctoetIx # optional
     volumes:
       - /root/chromium/config:/config
     ports:
@@ -96,3 +102,4 @@ docker-compose up -d
 # Display status
 echo "Docker Chromium is now running."
 echo "You can access it at http://<your-vps-ip>:$http_port"
+git remote add origin https://github.com/OctoetIx/Chromium-script.git
