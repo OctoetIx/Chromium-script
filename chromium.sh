@@ -93,4 +93,3 @@ docker-compose up -d
 # Display status
 echo "Docker Chromium is now running."
 echo "You can access it at http://<your-vps-ip>:$http_port"
-git remote add origin https://github.com/OctoetIx/Chromium-script.git
