@@ -14,15 +14,6 @@ else
     echo "Screen is already installed."
 fi
 
-# Check if Git is installed
-
-echo "checking if git is installed..."
-if ! command -v git &> /dev/null; then 
-    echo "git is not installed. Installing git"
-    sudo apt update && sudo apt install git -y
-else
-    echo " git is already installed"
-
 
 # Check if Docker is installed
 echo "Checking if Docker is installed..."
